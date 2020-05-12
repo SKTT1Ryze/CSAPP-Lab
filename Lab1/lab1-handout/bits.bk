@@ -238,7 +238,7 @@ int logicalAnd(int x, int y) {
  *   Rating: 3 
  */
 int logicalOr(int x, int y) {
-  /*
+	/*
 	 * transform x,y
 	 * to the logical value
 	 * and or x y
@@ -279,11 +279,6 @@ int rotateLeft(int x, int n) {
  *   Rating: 4
  */
 int parityCheck(int x) {
-	/*
-	 * 每次移位将x的低半位数与高半位数进行异或
-	 * 实现得到的x位表示总是减去偶数个1
-	 * 最后把得到的x右移31位
-	 */
 	x=x^(x<<16);
 	x=x^(x<<8);
 	x=x^(x<<4);
@@ -302,8 +297,8 @@ int parityCheck(int x) {
  *   Rating: 2
  */
 int mul2OK(int x) {
-x= !((((x>>31)&0x1)^((x>>30)&0x1))&0x1);
-	return x;
+	x= (((x>>31)&0x1)^((x>>30)&0x1));
+	return x^0x1;
 }
 /*
  * mult3div2 - multiplies by 3/2 rounding toward 0,
@@ -317,8 +312,11 @@ x= !((((x>>31)&0x1)^((x>>30)&0x1))&0x1);
  *   Rating: 2
  */
 int mult3div2(int x) {
+	int	temp;
 	x=x+(x<<1);	//x=x*3
-	x=(((x>>31)&0x1)&(((x<<31)>>31)&0x1))+(x>>1);	//x=x/2,x<0 and x[0]=0,then add 1
+	temp=(((x>>31)&0x1)&(!((x<<31)>>31)&0x1));
+//	x=(x>>1)+(((x>>31)&0x1)&(!((x<<31)>>31)&0x1));
+	x=(x>>1)+temp;
 	return x;
 }
 /* 
@@ -330,11 +328,7 @@ int mult3div2(int x) {
  *   Rating: 3
  */
 int subOK(int x, int y) {
-	int z=x+(~y+1);	//z=x-y
-	z=(z>>31)&0x1;	//get the 32th bit of x-y
-	x=(x>>31)&0x1;	//get the 32th bit of x
-	y=(y>>31)&0x1;	//get the 32th bit of y
-	return ((x^y)&(x^z))^0x1;	//check
+  return 2;
 }
 /* 
  * absVal - absolute value of x
@@ -345,14 +339,7 @@ int subOK(int x, int y) {
  *   Rating: 4
  */
 int absVal(int x) {
-	/*
-	 * check the 32th of x
-	 * if 0 return x
-	 * if 1 return ~x+1
-	 */
-	int z=x>>31;
-	x=(z&(~x+1))+((~z)&x);
-	return x;
+  return 2;
 }
 /* 
  * float_abs - Return bit-level equivalent of absolute value of f for
@@ -366,8 +353,7 @@ int absVal(int x) {
  *   Rating: 2
  */
 unsigned float_abs(unsigned uf) {
-	int x=uf&0x7fffffff;	//set the highest bit of uf to 0
-	return (x>0x7f800000)?uf:x;	//if x larger than 0x7f800000 return NaN
+  return 2;
 }
 /* 
  * float_f2i - Return bit-level equivalent of expression (int) f
@@ -382,14 +368,5 @@ unsigned float_abs(unsigned uf) {
  *   Rating: 4
  */
 int float_f2i(unsigned uf) {
-	int m=(uf>>23)&0xff;	//取出阶码
-	int n=(uf&0x007fffff)^0x00800000;	//取出小数
-	if(m>158)	//阶码大于31，溢出
-		return 0x80000000;
-	if(m<127)	//阶码小于0，返回0
-		return 0;
-	else if(((uf>>31)&0x1))	//uf最高位为1,根据m与150的大小确定移位的方向，并使用补码
-		return (m>150)?((~(n<<(m-150)))+1):((~(n>>(150-m)))+1);
-	else	//uf最高位为0,根据m与150的大小确定移位的方向，不使用补码
-		return (m>150)?(n<<(m-150)):(n>>(150-m));
+  return 2;
 }
